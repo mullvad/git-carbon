@@ -30,14 +30,14 @@ git commit -m "Add shared .editorconfig"
 ### Update shared file
 
 `git-carbon` remembers where it got the files from, so it can apply changes
-easily. To get the new version of a shared file use `pull`:
+easily. To get the new version of a shared file use `update`:
 
 ```
-git carbon pull .editorconfig
+git carbon update .editorconfig
 ```
 
 Or update all files `git-carbon` knows about:
 
 ```
-git carbon pull --all
+git carbon update --all
 ```
