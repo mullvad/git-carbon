@@ -10,14 +10,14 @@ One can think of it like `git-submodule` but for individual files.
 Add a file from a remote repository to your local worktree:
 
 ```
-git carbon add .editorconfig git@github.com:myorg/sharedfiles.git
+git carbon add .editorconfig ssh://git@github.com:myorg/sharedfiles.git
 ```
 
 `git-carbon` will refuse to overwrite a file that already exist, unless you use
 `--force`:
 
 ```
-git carbon add --force .editorconfig git@github.com:myorg/sharedfiles.git
+git carbon add --force .editorconfig ssh://git@github.com:myorg/sharedfiles.git
 ```
 
 `git-carbon` automatically stages its changes, so the only thing left is to
