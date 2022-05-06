@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	"io"
 	"io/fs"
 	"os"
 	"sort"
@@ -13,6 +14,8 @@ var (
 	FileName            = ".gitcarbon"
 	carbonSection       = "carbon"
 	sourceRepositoryKey = "sourceRepository"
+	sourceRefKey        = "sourceRef"
+	sourcePathKey       = "sourcePath"
 )
 
 type Config struct {
@@ -23,6 +26,8 @@ type Config struct {
 type CC struct {
 	Path             string
 	SourceRepository string
+	SourceRef        string
+	SourcePath       string
 }
 
 func New() *Config {
@@ -32,7 +37,7 @@ func New() *Config {
 	}
 }
 
-func Load() (*Config, error) {
+func LoadFile(name string) (*Config, error) {
 	config := New()
 	f, err := os.Open(FileName)
 	if errors.Is(err, fs.ErrNotExist) {
@@ -41,14 +46,32 @@ func Load() (*Config, error) {
 		return nil, err
 	}
 	defer f.Close()
-	err = format.NewDecoder(f).Decode(config.raw)
+	return Load(f)
+}
+
+func Load(r io.Reader) (*Config, error) {
+	config := New()
+	err := format.NewDecoder(r).Decode(config.raw)
 	for _, ss := range config.raw.Section(carbonSection).Subsections {
-		config.CCs[ss.Name] = CC{SourceRepository: ss.Option(sourceRepositoryKey)}
+		config.CCs[ss.Name] = CC{
+			SourceRepository: ss.Option(sourceRepositoryKey),
+			SourceRef:        ss.Option(sourceRefKey),
+			SourcePath:       ss.Option(sourcePathKey),
+		}
 	}
 	return config, err
 }
 
-func (c *Config) Save() error {
+func (c *Config) SaveFile(name string) error {
+	f, err := os.Create(FileName)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	return c.Save(f)
+}
+
+func (c *Config) Save(w io.Writer) error {
 	s := c.raw.Section(carbonSection)
 	subsections := make(format.Subsections, 0, len(c.CCs))
 
@@ -62,14 +85,15 @@ func (c *Config) Save() error {
 	for _, name := range names {
 		ss := &format.Subsection{Name: name}
 		subsections = append(subsections, ss)
-		ss.AddOption(sourceRepositoryKey, c.CCs[name].SourceRepository)
+		cc := c.CCs[name]
+		ss.AddOption(sourceRepositoryKey, cc.SourceRepository)
+		if cc.SourcePath != "" {
+			ss.AddOption(sourcePathKey, cc.SourcePath)
+		}
+		if cc.SourceRef != "" {
+			ss.AddOption(sourceRefKey, cc.SourceRef)
+		}
 	}
 	s.Subsections = subsections
-	f, err := os.Create(FileName)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	err = format.NewEncoder(f).Encode(c.raw)
-	return err
+	return format.NewEncoder(w).Encode(c.raw)
 }

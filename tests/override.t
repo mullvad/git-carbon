@@ -14,7 +14,7 @@ Init dest repository:
 
 Refuse to add a carbon copy if the file already exists
 
-  $ git -C B carbon add README.md ../A
+  $ git -C B carbon add ../A README.md
   Error: README.md already exists
   [1]
   $ cat B/README.md
@@ -22,7 +22,7 @@ Refuse to add a carbon copy if the file already exists
 
 Adding anyway with --force
 
-  $ git -C B carbon add --force README.md ../A
+  $ git -C B carbon add --force ../A README.md
   $ cat B/README.md
   It worked!
 
@@ -33,7 +33,7 @@ Overwriting an existing carbon copy
   $ git -C C add README.md
   $ git -C C commit --quiet --message "Initial commit"
 
-  $ git -C B carbon add --force README.md ../C
+  $ git -C B carbon add --force ../C README.md
   $ cat B/README.md
   I am from C
   $ cat B/.gitcarbon

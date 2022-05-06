@@ -15,7 +15,7 @@ Init dest repository:
 
 Add carbon copy
 
-  $ git -C B carbon add README.md ../A
+  $ git -C B carbon add ../A README.md
   $ cat B/README.md
   It worked!
   $ cat B/.gitcarbon
@@ -25,9 +25,9 @@ Add carbon copy
   A  .gitcarbon
   A  README.md
 
-Add an other file from:
+Add an other file:
 
-  $ git -C B carbon add .deepconf.yaml ../A
+  $ git -C B carbon add ../A .deepconf.yaml
   $ cat B/.deepconf.yaml
   answer: 42
   $ cat B/.gitcarbon

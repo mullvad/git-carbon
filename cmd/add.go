@@ -5,6 +5,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -15,7 +16,7 @@ import (
 
 // addCmd represents the add command
 var addCmd = &cobra.Command{
-	Use:                   "add [--force] FILE REPOSITORY",
+	Use:                   "add [--force] [--ref REF] REPOSITORY FILE [DESTINATION]",
 	DisableFlagsInUseLine: true,
 	Short:                 "Add a carbon-copy to the current repository.",
 	Long: `Copy the given file from a git remote to the current repository.
@@ -23,25 +24,40 @@ var addCmd = &cobra.Command{
 The path and repository are recorded in .gitcarbon so the file content can
 easily be updated later.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		conf, err := config.Load()
+		conf, err := config.LoadFile(".gitcarbon")
 		die(err)
-		dstp := args[0]
-		url := args[1]
+		url := args[0]
+		srcp := args[1]
+		var dstp string
+		if len(args) == 3 {
+			dstp = args[2]
+		} else if len(args) == 2 {
+			dstp = srcp
+		} else {
+			die(errors.New("Wrong number of arguments"))
+		}
 		if _, err := os.Stat(dstp); err == nil {
 			// File exists
-			if !*forceFlag {
+			if !*addFlags.force {
 				fmt.Fprintf(os.Stderr, "Error: %s already exists\n", dstp)
 				os.Exit(1)
 			}
 		}
-		src, err := getSourceFile(dstp, url)
+		src, err := getSourceFile(srcp, url, *addFlags.ref)
 		die(err)
 		dst, err := os.Create(dstp)
 		die(err)
 		defer dst.Close()
 		io.Copy(dst, src)
-		conf.CCs[dstp] = config.CC{SourceRepository: url}
-		err = conf.Save()
+		cc := config.CC{SourceRepository: url}
+		if srcp != dstp {
+			cc.SourcePath = srcp
+		}
+		if *addFlags.ref != "" {
+			cc.SourceRef = *addFlags.ref
+		}
+		conf.CCs[dstp] = cc
+		err = conf.SaveFile(".gitcarbon")
 		die(err)
 		err = stage(dstp)
 		die(err)
@@ -50,9 +66,13 @@ easily be updated later.`,
 	},
 }
 
-var forceFlag *bool
+var addFlags struct {
+	force *bool
+	ref   *string
+}
 
 func init() {
 	rootCmd.AddCommand(addCmd)
-	forceFlag = addCmd.Flags().BoolP("force", "f", false, "Add file even if it already exist in the repository")
+	addFlags.force = addCmd.Flags().BoolP("force", "f", false, "Add file even if it already exist in the repository")
+	addFlags.ref = addCmd.Flags().StringP("ref", "r", "", "Ref of source repository")
 }

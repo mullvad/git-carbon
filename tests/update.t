@@ -13,7 +13,7 @@ Init dest repository:
 
 Add carbon copy
 
-  $ git -C B carbon add README.md ../A
+  $ git -C B carbon add ../A README.md
   $ cat B/README.md
   Old stuff…
   $ git -C B commit --quiet --message "Added README"

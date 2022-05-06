@@ -27,7 +27,7 @@ var updateCmd = &cobra.Command{
 	DisableFlagsInUseLine: true,
 	Short:                 "Update carbon copies from their respective repository.",
 	Run: func(cmd *cobra.Command, args []string) {
-		conf, err := config.Load()
+		conf, err := config.LoadFile(".gitcarbon")
 		die(err)
 		paths := args
 		if *allFlag {
@@ -40,7 +40,11 @@ var updateCmd = &cobra.Command{
 		for _, p := range paths {
 			cc := conf.CCs[p]
 			fmt.Fprintf(os.Stderr, "Updating %s from %s\n", p, cc.SourceRepository)
-			src, err := getSourceFile(p, cc.SourceRepository)
+			srcp := cc.SourcePath
+			if srcp == "" {
+				srcp = p
+			}
+			src, err := getSourceFile(srcp, cc.SourceRepository, cc.SourceRef)
 			die(err)
 			dst, err := os.Create(p)
 			die(err)

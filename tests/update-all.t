@@ -15,8 +15,8 @@ Init dest repository:
 
 Add carbon copies
 
-  $ git -C B carbon add README.md ../A
-  $ git -C B carbon add FOOBAR.md ../A
+  $ git -C B carbon add ../A README.md
+  $ git -C B carbon add ../A FOOBAR.md
   $ git -C B commit -qm "Add carbon copies"
 
 Update upstream files

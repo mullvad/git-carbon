@@ -5,6 +5,7 @@ import (
 	"log"
 
 	git "github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/storage/memory"
 )
 
@@ -21,10 +22,11 @@ func stage(path string) error {
 	return err
 }
 
-func getSourceFile(path string, url string) (io.Reader, error) {
+func getSourceFile(path string, url string, refname string) (io.Reader, error) {
 	r, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{
-		Depth: 1,
-		URL:   url,
+		Depth:         1,
+		ReferenceName: plumbing.ReferenceName(refname),
+		URL:           url,
 	})
 	if err != nil {
 		return nil, err
