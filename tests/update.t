@@ -27,6 +27,7 @@ Update source file
 Update carbon copy
 
   $ git -C B carbon update README.md
+  Updating README.md from ../A
   $ cat B/README.md
   It worked!
   $ git -C B status --short

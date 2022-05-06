@@ -19,7 +19,7 @@ Add carbon copy
   $ cat B/README.md
   It worked!
   $ cat B/.gitcarbon
-  [cc "README.md"]
+  [carbon "README.md"]
   	sourceRepository = ../A
   $ git -C B status --short
   A  .gitcarbon
@@ -31,7 +31,7 @@ Add an other file from:
   $ cat B/.deepconf.yaml
   answer: 42
   $ cat B/.gitcarbon
-  [cc "README.md"]
+  [carbon ".deepconf.yaml"]
   	sourceRepository = ../A
-  [cc ".deepconf.yaml"]
+  [carbon "README.md"]
   	sourceRepository = ../A

@@ -5,6 +5,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
 	"io"
 	"os"
 
@@ -26,13 +27,20 @@ easily be updated later.`,
 		die(err)
 		dstp := args[0]
 		url := args[1]
+		if _, err := os.Stat(dstp); err == nil {
+			// File exists
+			if !*forceFlag {
+				fmt.Fprintf(os.Stderr, "Error: %s already exists\n", dstp)
+				os.Exit(1)
+			}
+		}
 		src, err := getSourceFile(dstp, url)
 		die(err)
 		dst, err := os.Create(dstp)
 		die(err)
 		defer dst.Close()
 		io.Copy(dst, src)
-		conf.Add(dstp, url)
+		conf.CCs[dstp] = config.CC{SourceRepository: url}
 		err = conf.Save()
 		die(err)
 		err = stage(dstp)

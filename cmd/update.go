@@ -5,6 +5,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
 	"io"
 	"os"
 
@@ -21,7 +22,8 @@ var updateCmd = &cobra.Command{
 		conf, err := config.Load()
 		die(err)
 		for _, p := range args {
-			cc := conf.Get(p)
+			cc := conf.CCs[p]
+			fmt.Fprintf(os.Stderr, "Updating %s from %s\n", p, cc.SourceRepository)
 			src, err := getSourceFile(p, cc.SourceRepository)
 			die(err)
 			dst, err := os.Create(p)
