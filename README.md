@@ -21,7 +21,7 @@ git carbon add --force .editorconfig ssh://git@github.com:myorg/sharedfiles.git
 ```
 
 `git-carbon` automatically stages its changes, so the only thing left is to
-commit the changes:
+commit:
 
 ```
 git commit -m "Add shared .editorconfig"
@@ -30,13 +30,15 @@ git commit -m "Add shared .editorconfig"
 ### Update shared file
 
 `git-carbon` remembers where it got the files from, so it can apply changes
-easily. To get the new version of a shared file use `update`:
+easily. To get the new version of a shared file, you can use the `update`
+subcommand:
 
 ```
 git carbon update .editorconfig
 ```
 
-Or update all files `git-carbon` knows about:
+You can also update all files `git-carbon` knows about by passing `--all` to
+the subcommand:
 
 ```
 git carbon update --all
