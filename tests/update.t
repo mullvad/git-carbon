@@ -1,4 +1,4 @@
-  $ export PATH="$(dirname $TESTDIR):$PATH"
+  $ source "$TESTDIR/__init__.sh"
 
 Init source repository:
 
