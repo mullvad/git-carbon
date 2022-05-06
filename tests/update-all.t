@@ -1,4 +1,4 @@
-  $ source "$TESTDIR/__init__.sh"
+  $ . "$TESTDIR/__init__.sh"
 
 
 Init source repository:
