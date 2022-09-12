@@ -1,2 +1,3 @@
 git-carbon
 tests/*.t.err
+coverage.out
