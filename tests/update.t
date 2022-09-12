@@ -13,7 +13,7 @@ Init dest repository:
 
 Add carbon copy
 
-  $ git -C B carbon add ../A README.md
+  $ git -C B carbon add --quiet ../A README.md
   $ cat B/README.md
   Old stuff…
   $ git -C B commit --quiet --message "Added README"
@@ -26,8 +26,7 @@ Update source file
 
 Update carbon copy
 
-  $ git -C B carbon update README.md
-  Updating README.md from ../A
+  $ git -C B carbon update --quiet README.md
   $ cat B/README.md
   It worked!
   $ git -C B status --short

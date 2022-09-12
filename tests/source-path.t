@@ -15,7 +15,7 @@ Init dest repository:
 
 Add carbon copy with different path
 
-  $ git -C B carbon add ../A README.md LISEZMOI.md
+  $ git -C B carbon add --quiet ../A README.md LISEZMOI.md
   $ cat B/LISEZMOI.md
   It worked!
   $ cat B/.gitcarbon
@@ -35,8 +35,7 @@ Update source file
 
 Update carbon copy
 
-  $ git -C B carbon update LISEZMOI.md
-  Updating LISEZMOI.md from ../A
+  $ git -C B carbon update --quiet LISEZMOI.md
   $ cat B/LISEZMOI.md
   It worked again!
   $ git -C B status --short

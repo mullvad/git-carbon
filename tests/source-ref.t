@@ -17,7 +17,7 @@ Init dest repository:
 
 Add carbon copy
 
-  $ git -C B carbon add --ref refs/heads/notmain ../A README.md
+  $ git -C B carbon add --quiet --ref refs/heads/notmain ../A README.md
   $ cat B/README.md
   Hello, notmain!
   $ cat B/.gitcarbon
@@ -34,7 +34,6 @@ Update file
   $ echo "Hi, notmain!" > A/README.md
   $ git -C A commit --all --quiet --message "Update README.md"
   $ git -C A switch --quiet main
-  $ git -C B carbon update README.md
-  Updating README.md from ../A
+  $ git -C B carbon update --quiet README.md
   $ cat B/README.md
   Hi, notmain!

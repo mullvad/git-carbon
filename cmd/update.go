@@ -11,14 +11,19 @@ import (
 	"sort"
 
 	"github.com/gregoire-mullvad/git-carbon/config"
+	"github.com/gregoire-mullvad/git-carbon/git"
 	"github.com/spf13/cobra"
 )
 
-var allFlag *bool
+var updateFlags struct {
+	all   *bool
+	quiet *bool
+}
 
 func init() {
 	rootCmd.AddCommand(updateCmd)
-	allFlag = updateCmd.Flags().BoolP("all", "a", false, "Update all files git-carbon knows about.")
+	updateFlags.all = updateCmd.Flags().BoolP("all", "a", false, "Update all files git-carbon knows about.")
+	updateFlags.quiet = updateCmd.Flags().BoolP("quiet", "q", false, "Suppress output.")
 }
 
 // updateCmd represents the update command
@@ -30,21 +35,24 @@ var updateCmd = &cobra.Command{
 		conf, err := config.LoadFile(".gitcarbon")
 		die(err)
 		paths := args
-		if *allFlag {
+		if *updateFlags.all {
 			paths = make([]string, 0, len(conf.CCs))
 			for name := range conf.CCs {
 				paths = append(paths, name)
 			}
 			sort.Strings(paths)
 		}
+		gitClient := &git.Client{Quiet: *updateFlags.quiet}
 		for _, p := range paths {
 			cc := conf.CCs[p]
-			fmt.Fprintf(os.Stderr, "Updating %s from %s\n", p, cc.SourceRepository)
+			if !*updateFlags.quiet {
+				fmt.Fprintf(os.Stderr, "Updating %s from %s\n", p, cc.SourceRepository)
+			}
 			srcp := cc.SourcePath
 			if srcp == "" {
 				srcp = p
 			}
-			src, err := getSourceFile(srcp, cc.SourceRepository, cc.SourceRef)
+			src, err := gitClient.GetSourceFile(srcp, cc.SourceRepository, cc.SourceRef)
 			die(err)
 			dst, err := os.Create(p)
 			die(err)

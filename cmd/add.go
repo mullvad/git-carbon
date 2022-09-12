@@ -11,6 +11,7 @@ import (
 	"os"
 
 	"github.com/gregoire-mullvad/git-carbon/config"
+	"github.com/gregoire-mullvad/git-carbon/git"
 	"github.com/spf13/cobra"
 )
 
@@ -43,7 +44,7 @@ easily be updated later.`,
 				os.Exit(1)
 			}
 		}
-		src, err := getSourceFile(srcp, url, *addFlags.ref)
+		src, err := (&git.Client{Quiet: *addFlags.quiet}).GetSourceFile(srcp, url, *addFlags.ref)
 		die(err)
 		dst, err := os.Create(dstp)
 		die(err)
@@ -68,11 +69,13 @@ easily be updated later.`,
 
 var addFlags struct {
 	force *bool
+	quiet *bool
 	ref   *string
 }
 
 func init() {
 	rootCmd.AddCommand(addCmd)
 	addFlags.force = addCmd.Flags().BoolP("force", "f", false, "Add file even if it already exist in the repository")
+	addFlags.quiet = addCmd.Flags().BoolP("quiet", "q", false, "Suppress output")
 	addFlags.ref = addCmd.Flags().StringP("ref", "r", "", "Ref of source repository")
 }

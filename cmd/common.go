@@ -1,12 +1,9 @@
 package cmd
 
 import (
-	"io"
 	"log"
 
 	git "github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing"
-	"github.com/go-git/go-git/v5/storage/memory"
 )
 
 func stage(path string) error {
@@ -20,30 +17,6 @@ func stage(path string) error {
 	}
 	_, err = w.Add(path)
 	return err
-}
-
-func getSourceFile(path string, url string, refname string) (io.Reader, error) {
-	r, err := git.Clone(memory.NewStorage(), nil, &git.CloneOptions{
-		Depth:         1,
-		ReferenceName: plumbing.ReferenceName(refname),
-		URL:           url,
-	})
-	if err != nil {
-		return nil, err
-	}
-	ref, err := r.Head()
-	if err != nil {
-		return nil, err
-	}
-	c, err := r.CommitObject(ref.Hash())
-	if err != nil {
-		return nil, err
-	}
-	f, err := c.File(path)
-	if err != nil {
-		return nil, err
-	}
-	return f.Blob.Reader()
 }
 
 func die(err error) {
