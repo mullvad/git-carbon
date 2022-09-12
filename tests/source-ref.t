@@ -2,7 +2,7 @@
 
 Init source repository:
 
-  $ git init --quiet A
+  $ git init --quiet --initial-branch=main A
   $ echo "Hello, main!" > A/README.md
   $ git -C A add README.md
   $ git -C A commit --quiet --message "Initial commit"
