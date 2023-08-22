@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
@@ -37,7 +36,7 @@ easily be updated later.`,
 		} else {
 			die(errors.New("Wrong number of arguments"))
 		}
-		if _, err := os.Stat(dstp); err == nil {
+		if exists(dstp) {
 			// File exists
 			if !*addFlags.force {
 				fmt.Fprintf(os.Stderr, "Error: %s already exists\n", dstp)
