@@ -3,7 +3,7 @@
 Init source repository:
 
   $ git init --quiet source
-  $ touch source/{foo,bar}
+  $ touch source/foo source/bar
   $ git -C source add foo bar
   $ git -C source commit --quiet --message "Initial commit"
 
