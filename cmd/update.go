@@ -15,14 +15,16 @@ import (
 )
 
 var updateFlags struct {
-	all   *bool
-	quiet *bool
+	all    *bool
+	quiet  *bool
+	branch *string
 }
 
 func init() {
 	rootCmd.AddCommand(updateCmd)
 	updateFlags.all = updateCmd.Flags().BoolP("all", "a", false, "Update all files git-carbon knows about.")
 	updateFlags.quiet = updateCmd.Flags().BoolP("quiet", "q", false, "Suppress output.")
+	updateFlags.branch = updateCmd.Flags().String("branch", "", "Override the branch to update from.")
 }
 
 // updateCmd represents the update command
@@ -51,7 +53,11 @@ var updateCmd = &cobra.Command{
 			if srcp == "" {
 				srcp = p
 			}
-			src, err := gitClient.GetSourceFile(srcp, cc.SourceRepository, cc.SourceRef)
+			branch := *updateFlags.branch
+			if branch == "" {
+				branch = cc.SourceRef
+			}
+			src, err := gitClient.GetSourceFile(srcp, cc.SourceRepository, branch)
 			die(err)
 			dst, err := os.Create(p)
 			die(err)
