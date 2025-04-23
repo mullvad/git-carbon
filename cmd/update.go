@@ -9,8 +9,8 @@ import (
 	"os"
 	"sort"
 
-	"github.com/gregoire-mullvad/git-carbon/config"
-	"github.com/gregoire-mullvad/git-carbon/git"
+	"github.com/mullvad/git-carbon/config"
+	"github.com/mullvad/git-carbon/git"
 	"github.com/spf13/cobra"
 )
 

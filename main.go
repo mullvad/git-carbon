@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "github.com/gregoire-mullvad/git-carbon/cmd"
+import "github.com/mullvad/git-carbon/cmd"
 
 func main() {
 	cmd.Execute()

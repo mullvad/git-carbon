@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/gregoire-mullvad/git-carbon/config"
+	"github.com/mullvad/git-carbon/config"
 	"github.com/spf13/cobra"
 )
 

@@ -1,4 +1,4 @@
-module github.com/gregoire-mullvad/git-carbon
+module github.com/mullvad/git-carbon
 
 go 1.23.0
 

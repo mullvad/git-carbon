@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gregoire-mullvad/git-carbon/config"
+	"github.com/mullvad/git-carbon/config"
 	"github.com/stretchr/testify/assert"
 )
 
