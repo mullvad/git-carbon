@@ -25,7 +25,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "git-carbon",
 	Short: "Add & update files from other repositories.",
-	Long: `git-carbon is a tool that help manage duplicated files across reposistories.
+	Long: `git-carbon is a tool that helps manage duplicated files across repositories.
 
 Like git-submodule but for individual files.`,
 }
