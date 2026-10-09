@@ -4,7 +4,6 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -17,6 +16,7 @@ import (
 // addCmd represents the add command
 var addCmd = &cobra.Command{
 	Use:                   "add [--force] [--ref REF] REPOSITORY FILE [DESTINATION]",
+	Args:                  cobra.RangeArgs(2, 3),
 	DisableFlagsInUseLine: true,
 	Short:                 "Add a carbon-copy to the current repository.",
 	Long: `Copy the given file from a git remote to the current repository.
@@ -28,13 +28,9 @@ easily be updated later.`,
 		die(err)
 		url := args[0]
 		srcp := args[1]
-		var dstp string
+		dstp := srcp
 		if len(args) == 3 {
 			dstp = args[2]
-		} else if len(args) == 2 {
-			dstp = srcp
-		} else {
-			die(errors.New("Wrong number of arguments"))
 		}
 		if exists(dstp) {
 			// File exists

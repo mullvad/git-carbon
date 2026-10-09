@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -12,15 +11,13 @@ import (
 // removeCmd represents the remove command
 var removeCmd = &cobra.Command{
 	Use:                   "remove FILE",
+	Args:                  cobra.ExactArgs(1),
 	DisableFlagsInUseLine: true,
 	Short:                 "Remove a carbon-copy from the current repository.",
 	Long:                  `Remove the given file from .gitcarbon and the current repository.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		conf, err := config.LoadFile(".gitcarbon")
 		die(err)
-		if len(args) != 1 {
-			return errors.New("Missing FILE")
-		}
 		path := args[0]
 		_, ok := conf.CCs[path]
 		if !ok {

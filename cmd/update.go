@@ -29,13 +29,16 @@ func init() {
 
 // updateCmd represents the update command
 var updateCmd = &cobra.Command{
-	Use:                   "update [--all] FILE...",
+	Use:                   "update (FILE... | --all)",
 	DisableFlagsInUseLine: true,
 	Short:                 "Update carbon copies from their respective repository.",
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		conf, err := config.LoadFile(".gitcarbon")
 		die(err)
 		paths := args
+		if len(paths) == 0 && !*updateFlags.all {
+			return fmt.Errorf("no files specified, pass FILE... or use --all")
+		}
 		if *updateFlags.all {
 			paths = make([]string, 0, len(conf.CCs))
 			for name := range conf.CCs {
@@ -67,5 +70,6 @@ var updateCmd = &cobra.Command{
 			err = stage(p)
 			die(err)
 		}
+		return nil
 	},
 }
