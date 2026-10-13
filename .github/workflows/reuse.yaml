@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: 2020 Free Software Foundation Europe e.V.
+# SPDX-FileCopyrightText: 2026 Mullvad VPN AB
+# SPDX-License-Identifier: CC0-1.0
+
+name: REUSE compliance check
+on: [pull_request]
+
+permissions:
+  contents: read
+
+concurrency:
+  group:  ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  reuse-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: REUSE Compliance Check
+        uses: fsfe/reuse-action@v6
