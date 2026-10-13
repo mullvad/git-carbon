@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2026 Mullvad VPN AB
+SPDX-License-Identifier: GPL-3.0-only
+-->
+
 # git-carbon: duplicate files between repositories
 
 `git-carbon` is a tool that helps manage duplicated files across repositories.

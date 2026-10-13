@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Mullvad VPN AB
+// SPDX-License-Identifier: GPL-3.0-only
+
 module github.com/mullvad/git-carbon
 
 go 1.25.10

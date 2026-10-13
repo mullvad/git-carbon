@@ -1,6 +1,6 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-*/
+// SPDX-FileCopyrightText: 2026 Mullvad VPN AB
+// SPDX-License-Identifier: GPL-3.0-only
+
 package cmd
 
 import (
